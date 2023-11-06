@@ -44,7 +44,7 @@ async function run() {
     });
 
     app.get("/api/v1/allBlog", async (req, res) => {
-      const cursor = servicesCollection.find();
+      const cursor =blogCollection.find();
       const result = await cursor.toArray();
       res.send(result);
     });
