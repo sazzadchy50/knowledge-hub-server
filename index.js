@@ -120,7 +120,7 @@ async function run() {
       const cursor = blogCollection.find().sort({submissionTime: -1});
       const result = await cursor.toArray();
       res.send(result)      
-    })
+    })f
 
     //details page data
     app.get("/api/v1/allBlog/:id", async(req, res)=>{
