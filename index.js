@@ -35,7 +35,7 @@ async function run() {
     // Connect the client to the server	(optional starting in v4.7)
     // await client.connect();
     const blogCollection = client.db("knowledge-hub").collection("allBlog");
-
+d
     app.post("/api/v1/add-blog", async (req, res) => {
       const blog = req.body;
       console.log(req.body);
