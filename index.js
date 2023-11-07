@@ -44,11 +44,30 @@ async function run() {
     });
 
     app.get("/api/v1/allBlog", async (req, res) => {
-      const cursor =blogCollection.find();
+      let queryObj = {};
+
+      const category = req.query.category;
+      const title = req.query.title;
+      console.log(req.query);
+
+      if (category) {
+        queryObj.category = category;
+      }
+      if (title) {
+        title - new RegExp(title, "i")
+        queryObj.title = title;
+      }
+      const cursor = blogCollection.find(queryObj);
       const result = await cursor.toArray();
       res.send(result);
     });
 
+    app.get("/api/v1/recentBlog", async(req, res)=>{
+
+      const cursor = blogCollection.find();
+      const result = await cursor.toArray();
+      res.send(result)
+    })
     // Send a ping to confirm a successful connection
     await client.db("admin").command({ ping: 1 });
     console.log(
