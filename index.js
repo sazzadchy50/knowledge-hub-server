@@ -70,6 +70,16 @@ async function run() {
       res.send(result)
       console.log(result);
     })
+
+    app.get("/api/v1/allBlog/:id", async(req, res)=>{
+      const id = req.params.id;
+      const query = {_id: new ObjectId(id)}
+      const result = await blogCollection.findOne(query)
+     
+      res.send(result)
+      console.log(result);
+    })
+    
     // Send a ping to confirm a successful connection
     await client.db("admin").command({ ping: 1 });
     console.log(
