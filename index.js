@@ -35,7 +35,7 @@ async function run() {
     // Connect the client to the server	(optional starting in v4.7)
     // await client.connect();
     const blogCollection = client.db("knowledge-hub").collection("allBlog");
-d
+
     app.post("/api/v1/add-blog", async (req, res) => {
       const blog = req.body;
       console.log(req.body);
@@ -63,10 +63,12 @@ d
     });
 
     app.get("/api/v1/recentBlog", async(req, res)=>{
+    
+      const cursor = blogCollection.find().sort({submissionTime: -1});
 
-      const cursor = blogCollection.find();
       const result = await cursor.toArray();
       res.send(result)
+      console.log(result);
     })
     // Send a ping to confirm a successful connection
     await client.db("admin").command({ ping: 1 });
