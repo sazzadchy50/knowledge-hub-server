@@ -32,7 +32,7 @@ const logger = (req, res, next)=>{
 app.use(
   cors({
     origin: [
-      // 'http://localhost:5173',
+      'http://localhost:5173',
       'https://knowledge-hub-ed3c8.web.app',
       'https://knowledge-hub-ed3c8.firebaseapp.com/'
     
@@ -63,7 +63,7 @@ async function run() {
     // Connect the client to the server	(optional starting in v4.7)
     // await client.connect();
     const blogCollection = client.db("knowledge-hub").collection("allBlog");
-
+    const commentCollection = client.db("knowledge-hub").collection("comment") 
     //auth related api token access
     app.post('/api/v1/user/access-token', async(req, res)=>{
       const user = req.body;
@@ -94,6 +94,24 @@ async function run() {
       const result = await blogCollection.insertOne(blog);
       res.send(result);
     });
+
+    //comment section post 
+    app.post('/api/v1/user/comment', async(req, res)=>{
+      const comment = req.body;
+      const result = await commentCollection.insertOne(comment);
+      res.send(result)
+    })
+
+    //comment section get 
+    app.get('/api/v1/user/comment/:id', async(req, res)=>{
+      const id = req.params.id;
+      // const filter = {_id: new ObjectId(id)};
+      const filter = {blog_id: id};
+      const result = await commentCollection.find(filter).toArray();
+      console.log(filter);
+      console.log(result);
+      res.send(result)
+    })
 
     app.get("/api/v1/allBlog", async (req, res) => {
       // console.log('owner', req.user);
@@ -154,6 +172,7 @@ async function run() {
       res.send(result)
 
     })
+    
 
     // Send a ping to confirm a successful connection
     await client.db("admin").command({ ping: 1 });
