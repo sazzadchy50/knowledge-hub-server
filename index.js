@@ -128,12 +128,30 @@ async function run() {
       const query = {_id: new ObjectId(id)}
       const result = await blogCollection.findOne(query)
      
-      res.send(result)
+      res.send(result)   
     })
+
+    //update blog
     app.patch("/api/v1/allBlog/:id", async(req, res)=>{
       const id = req.params.id;
-      const query = {_id: new ObjectId(id)}
+      const filter = {_id: new ObjectId(id)}
+      const options = { upsert: true };
+      const updateBlog = req.body;
+      console.log(updateBlog);
+      const updateDoc = {
+        $set: {
+          image : updateBlog.image,
+          title : updateBlog.title,
+          shortDescription : updateBlog.shortDescription,
+          category : updateBlog.category,
+          longDescription : updateBlog.longDescription
+        },
+      };
+      const result = await blogCollection.updateOne(filter, updateDoc, options);
+      res.send(result)
+
     })
+
     // Send a ping to confirm a successful connection
     await client.db("admin").command({ ping: 1 });
     console.log(
