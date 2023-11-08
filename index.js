@@ -57,13 +57,13 @@ const client = new MongoClient(uri, {
 });
 
 
-
 async function run() {
   try {
     // Connect the client to the server	(optional starting in v4.7)
     // await client.connect();
     const blogCollection = client.db("knowledge-hub").collection("allBlog");
     const commentCollection = client.db("knowledge-hub").collection("comment") 
+    const wishlistCollection = client.db("knowledge-hub").collection("wishlist") 
     //auth related api token access
     app.post('/api/v1/user/access-token', async(req, res)=>{
       const user = req.body;
@@ -143,6 +143,18 @@ async function run() {
       res.send(result)      
     })
 
+    // wishlist section 
+    app.post('/api/v1/user/wishlist', async(req, res)=>{
+      const wishlistData = req.body;
+      const result = await wishlistCollection.insertOne(wishlistData);
+      console.log(wishlistData);
+      res.send(result)
+
+    })
+
+    //wishlist get operation
+    app.get()
+
     //details page data
     app.get("/api/v1/allBlog/:id", async(req, res)=>{
       const id = req.params.id;
@@ -172,7 +184,7 @@ async function run() {
       res.send(result)
 
     })
-    g
+    
 
     // Send a ping to confirm a successful connection
     await client.db("admin").command({ ping: 1 });
