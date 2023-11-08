@@ -120,7 +120,7 @@ async function run() {
       const cursor = blogCollection.find().sort({submissionTime: -1});
       const result = await cursor.toArray();
       res.send(result)      
-    })f
+    })
 
     //details page data
     app.get("/api/v1/allBlog/:id", async(req, res)=>{
@@ -128,7 +128,7 @@ async function run() {
       const query = {_id: new ObjectId(id)}
       const result = await blogCollection.findOne(query)
      
-      res.send(result)   
+      res.send(result)
     })
     app.patch("/api/v1/allBlog/:id", async(req, res)=>{
       const id = req.params.id;
