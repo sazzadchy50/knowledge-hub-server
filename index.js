@@ -9,10 +9,7 @@ const { MongoClient, ServerApiVersion, ObjectId } = require("mongodb");
 // middleware
 const app = express();
 const port = process.env.PORT || 5000;
-const logger = (req, res, next)=>{
-  console.log(req.method, req.url);
-  
-}
+
  const verifyToken = (req, res, next)=>{
   const token = req.cookies.token;
   if(!token){
@@ -64,6 +61,8 @@ async function run() {
     const blogCollection = client.db("knowledge-hub").collection("allBlog");
     const commentCollection = client.db("knowledge-hub").collection("comment") 
     const wishlistCollection = client.db("knowledge-hub").collection("wishlist") 
+
+
     //auth related api token access
     app.post('/api/v1/user/access-token', async(req, res)=>{
       const user = req.body;
@@ -108,13 +107,14 @@ async function run() {
       // const filter = {_id: new ObjectId(id)};
       const filter = {blog_id: id};
       const result = await commentCollection.find(filter).toArray();
+   
       console.log(filter);
       console.log(result);
       res.send(result)
     })
 
     app.get("/api/v1/allBlog", async (req, res) => {
-      // console.log('owner', req.user);
+      console.log('owner', req.user);
       //  if(req?.user?.email === req.query.email){
       //   return res.status(403).send({message: 'forbidden access'})
       //  }
@@ -153,7 +153,15 @@ async function run() {
     })
 
     //wishlist get operation
-    app.get()
+    app.get('/api/v1/user/wishlist/:email',verifyToken, async(req, res)=>{
+      const userEmail = req.params.email;         
+      const filter = {userEmail: userEmail};
+      const result = await wishlistCollection.find(filter).toArray();
+      console.log(filter);
+      console.log(result);
+      console.log('user email:',req?.session?.user?.email);
+      res.send(result)
+    })
 
     //details page data
     app.get("/api/v1/allBlog/:id", async(req, res)=>{
@@ -165,7 +173,7 @@ async function run() {
     })
 
     //update blog
-    app.patch("/api/v1/allBlog/:id", async(req, res)=>{
+    app.patch("/api/v1/allBlog/:id",verifyToken , async(req, res)=>{
       const id = req.params.id;
       const filter = {_id: new ObjectId(id)}
       const options = { upsert: true };
