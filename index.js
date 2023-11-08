@@ -29,11 +29,14 @@ const logger = (req, res, next)=>{
   
  }
 
-
-
 app.use(
   cors({
-    origin: "http://localhost:5173",
+    origin: [
+      // 'http://localhost:5173',
+      'https://knowledge-hub-ed3c8.web.app',
+      'https://knowledge-hub-ed3c8.firebaseapp.com/'
+    
+    ],
     credentials: true,
   })
 );
